@@ -90,7 +90,14 @@ def update_movie_id(id):
 
     return jsonify(movie_schema.dump(movie_to_update))
 
+@app.route('/movie/delete/<id>', methods=["DELETE"])
+def movie_to_delete(id):
+    delete_movie = db.session.query(Movie).filter(Movie.id == id).first()
+    db.session.delete(delete_movie)
 
+    db.session.commit()
+
+    return jsonify("Movie got Erased!")
 
 
 
