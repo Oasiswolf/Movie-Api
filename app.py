@@ -30,8 +30,30 @@ class MovieSchema(ma.Schema):
 movie_schema = MovieSchema()
 multi_movie_schema = MovieSchema(many=True)
 
+@app.route('/movie/add', methods=["POST"])
+def add_movie():
+    if request.content_type != 'application/json':
+        return jsonify('Error: Data must be sent as JSON')
+
+    post_data = request.get_json()
+    title = post_data.get('title')
+    genre = post_data.get('genre')
+    mpaa_rating = post_data.get('mpaa_rating')
+    poster_img = post_data.get('poster_img')
 
 
+    if title == None:
+        return jsonify("Error: You must provide a 'Title' key")
+    if genre == None:
+        return jsonify("Error: You must provide a 'Genre' key")
+    
+    new_record = Movie(title, genre, mpaa_rating, poster_img)
+    db.session.add(new_record)
+    db.session.commit()
+
+    return jsonify(movie_schema.dump(new_record))
+
+    
 
 
 
