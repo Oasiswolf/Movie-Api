@@ -59,7 +59,10 @@ def get_all_movies():
     return jsonify(multi_movie_schema.dump(all_records))
 
 
-    
+@app.route('/movie/get/<id>', methods=["GET"])
+def get_movie_id(id):
+    one_movie = db.session.query(Movie).filter(Movie.id == id).first()
+    return jsonify(movie_schema.dump(one_movie))
 
 
 
