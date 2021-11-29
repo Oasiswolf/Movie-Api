@@ -53,6 +53,12 @@ def add_movie():
 
     return jsonify(movie_schema.dump(new_record))
 
+@app.route('/movie/get', methods=["GET"])
+def get_all_movies():
+    all_records = db.session.query(Movie).all()
+    return jsonify(multi_movie_schema.dump(all_records))
+
+
     
 
 
