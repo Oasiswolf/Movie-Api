@@ -64,9 +64,31 @@ def get_movie_id(id):
     one_movie = db.session.query(Movie).filter(Movie.id == id).first()
     return jsonify(movie_schema.dump(one_movie))
 
+@app.route('/movie/update/<id>', methods=["PUT"])
+def update_movie_id(id):
+    if request.content_type != 'application/json':
+        return jsonify('Error: Data must be sent as JSON')
+    
+    put_data = request.get_json()
+    title = put_data.get('title')
+    genre = put_data.get('genre')
+    mpaa_rating = put_data.get('mpaa_rating')
+    poster_img = put_data.get('poster_img')
 
+    movie_to_update = db.session.query(Movie).filter(Movie.id == id).first()
 
+    if title != None:
+        movie_to_update.title = title
+    if genre != None:
+        movie_to_update.genre = genre
+    if mpaa_rating != None:
+        movie_to_update.mpaa_rating = mpaa_rating
+    if poster_img != None:
+        movie_to_update.poster_img = poster_img
 
+    db.session.commit()
+
+    return jsonify(movie_schema.dump(movie_to_update))
 
 
 
